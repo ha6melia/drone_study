@@ -1,18 +1,138 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ドローン二等 学科試験 模擬問題</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ドローン二等 学習サイト</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="container glass">
-    <h1>ドローン二等 学科試験 模擬問題</h1>
-    <div id="quiz-container"></div>
-    <button id="next-btn">次の問題</button>
-    <div id="result"></div>
-</div>
-<script src="script.js"></script>
+  <header class="glass header">
+    <h1>ドローン二等 学習サイト</h1>
+    <p class="subtitle">第4版準拠・図解多め／iPhone最適化</p>
+  </header>
+
+  <main id="view-home" class="view active">
+    <section class="menu grid">
+      <button class="card glass" onclick="go('learn')">
+        <h2>📘 学習モード</h2>
+        <p>図解と用語解説で基礎から理解</p>
+      </button>
+      <button class="card glass" onclick="go('exam')">
+        <h2>📝 模擬試験</h2>
+        <p>三択ランダム／出題数を選択</p>
+      </button>
+      <button class="card glass" onclick="go('progress')">
+        <h2>📊 進捗確認</h2>
+        <p>正答率・回数・苦手トピック</p>
+      </button>
+      <button class="card glass" onclick="go('about')">
+        <h2>ℹ️ 使い方・試験概要</h2>
+        <p>操作方法と注意事項</p>
+      </button>
+    </section>
+  </main>
+
+  <section id="view-learn" class="view">
+    <div class="toolbar">
+      <button class="btn" onclick="go('home')">← ホームへ</button>
+    </div>
+    <article class="glass content">
+      <h2>ステージ1：航空法と関連法規（要点）</h2>
+      <p>二等試験で頻出の論点を図解でまとめました。</p>
+      <div class="figure">
+        <svg viewBox="0 0 640 260" width="100%" aria-hidden="true">
+          <defs>
+            <linearGradient id="bg" x1="0" x2="1">
+              <stop offset="0" stop-color="#e6f2ff"/>
+              <stop offset="1" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="640" height="260" rx="12" fill="url(#bg)"/>
+          <rect x="24" y="24" width="220" height="90" rx="10" fill="#f0f9ff" stroke="#7dd3fc"/>
+          <text x="36" y="50" fill="#0369a1" font-size="14">空港周辺（制限空域）</text>
+          <text x="36" y="72" fill="#065f46" font-size="12">許可・承認が必要な場合あり</text>
+
+          <rect x="400" y="24" width="216" height="90" rx="10" fill="#fff7ed" stroke="#fbbf24"/>
+          <text x="412" y="50" fill="#7c2d12" font-size="14">人口集中地区（DID）</text>
+          <text x="412" y="72" fill="#92400e" font-size="12">安全確保・事前確認が重要</text>
+
+          <rect x="210" y="140" width="220" height="90" rx="10" fill="#ecfeff" stroke="#22d3ee"/>
+          <text x="222" y="168" fill="#155e75" font-size="14">目視外飛行（BVLOS）</text>
+          <text x="222" y="190" fill="#155e75" font-size="12">原則許可が必要</text>
+        </svg>
+        <p class="cap">図：代表的に制限・配慮が必要なケース（概念図）</p>
+      </div>
+
+      <h3>重要ポイント（抜粋）</h3>
+      <ul>
+        <li>150m以上の高度は原則飛行不可。</li>
+        <li>第三者上空は原則回避。立入管理等の安全確保が最優先。</li>
+        <li>DIDや空港周辺は事前の確認と許可・承認が必要な場合がある。</li>
+        <li>夜間飛行は追加要件（衝突防止灯等）。</li>
+      </ul>
+
+      <details class="faq">
+        <summary>用語：第三者・関係者・立入管理</summary>
+        <div class="faq-body">
+          <p><b>第三者</b>：操縦者・補助者など運航関係者以外の人。<br/>
+             <b>立入管理</b>：関係者以外が飛行区域に入らないよう区画・誘導すること。</p>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <section id="view-exam" class="view">
+    <div class="toolbar">
+      <button class="btn" onclick="go('home')">← ホームへ</button>
+    </div>
+    <article class="glass content">
+      <h2>模擬試験</h2>
+      <div class="row">
+        <label>出題数：</label>
+        <select id="qcount">
+          <option value="10">10問</option>
+          <option value="20">20問</option>
+          <option value="all">全問</option>
+        </select>
+        <button class="btn" onclick="startExam()">開始</button>
+      </div>
+      <div id="quiz-area"></div>
+      <div id="quiz-controls" class="row"></div>
+      <div id="quiz-result" class="result"></div>
+    </article>
+  </section>
+
+  <section id="view-progress" class="view">
+    <div class="toolbar">
+      <button class="btn" onclick="go('home')">← ホームへ</button>
+    </div>
+    <article class="glass content">
+      <h2>進捗確認</h2>
+      <div id="progress-board"></div>
+      <button class="btn danger" onclick="resetProgress()">進捗をリセット</button>
+    </article>
+  </section>
+
+  <section id="view-about" class="view">
+    <div class="toolbar">
+      <button class="btn" onclick="go('home')">← ホームへ</button>
+    </div>
+    <article class="glass content">
+      <h2>使い方・試験概要</h2>
+      <ul>
+        <li>ホームから「学習」→図解で理解、「模擬試験」→ランダム出題。</li>
+        <li>各回終了後に正答数・解説を表示。誤答は復習リストに保存。</li>
+        <li>進捗はブラウザに保存されます（iPhoneでも保持）。</li>
+      </ul>
+      <p class="note">最終確認は必ず公式資料をご参照ください。</p>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <p>第4版教則の要点に基づき作成（参考）。最終的な出題範囲は公式資料を確認してください。</p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
